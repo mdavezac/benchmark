@@ -66,7 +66,7 @@ DEFINE_int32(benchmark_repetitions, 1,
 
 DEFINE_string(benchmark_format, "console",
               "The format to use for console output. Valid values are "
-              "'console', 'json', or 'csv'.");
+              "'console', 'json', 'csv', or 'null'.");
 
 DEFINE_bool(color_print, true, "Enables colorized logging.");
 
@@ -890,6 +890,8 @@ std::unique_ptr<BenchmarkReporter> GetDefaultReporter() {
     return PtrType(new JSONReporter);
   } else if (FLAGS_benchmark_format == "csv") {
     return PtrType(new CSVReporter);
+  } else if (FLAGS_benchmark_format == "null") {
+    return PtrType(new NullReporter);
   } else {
     std::cerr << "Unexpected format: '" << FLAGS_benchmark_format << "'\n";
     std::exit(1);
@@ -930,7 +932,7 @@ void PrintUsageAndExit() {
           "          [--benchmark_filter=<regex>]\n"
           "          [--benchmark_min_time=<min_time>]\n"
           "          [--benchmark_repetitions=<num_repetitions>]\n"
-          "          [--benchmark_format=<console|json|csv>]\n"
+          "          [--benchmark_format=<console|json|csv|null>]\n"
           "          [--color_print={true|false}]\n"
           "          [--v=<verbosity>]\n");
   exit(0);
@@ -964,7 +966,8 @@ void ParseCommandLineFlags(int* argc, char** argv) {
 
   if (FLAGS_benchmark_format != "console" &&
       FLAGS_benchmark_format != "json" &&
-      FLAGS_benchmark_format != "csv") {
+      FLAGS_benchmark_format != "csv" &&
+      FLAGS_benchmark_format != "null") {
     PrintUsageAndExit();
   }
 }

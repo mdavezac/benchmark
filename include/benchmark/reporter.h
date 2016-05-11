@@ -89,6 +89,16 @@ protected:
   static TimeUnitMultiplier GetTimeUnitAndMultiplier(TimeUnit unit);
 };
 
+// Null reporter does nothing
+class NullReporter : public BenchmarkReporter {
+ public:
+  virtual bool ReportContext(const Context&) { return true; }
+  virtual void ReportRuns(const std::vector<Run>&) {}
+
+ protected:
+  virtual void PrintRunData(const Run&) {}
+};
+
 // Simple reporter that outputs benchmark data to the console. This is the
 // default reporter used by RunSpecifiedBenchmarks().
 class ConsoleReporter : public BenchmarkReporter {
